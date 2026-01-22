@@ -1,6 +1,6 @@
 name: Deploy Node Application
 
-on: 
+on:
   push:
     branches:
       - mern-ec2-docker
@@ -23,7 +23,7 @@ jobs:
 
       - name: Publish Image to Docker Hub
         run: docker push maazimran/nodejs-app2:latest
- 
+
   deploy:
     needs: build
     runs-on: self-hosted
@@ -38,5 +38,6 @@ jobs:
         run: |
           docker run -d -p 4000:4000 \
             --name nodejs-app-container \
+            -e MONGO_USER="${{ secrets.MONGO_USER }}" \
             -e MONGO_PASSWORD="${{ secrets.MONGO_PASSWORD }}" \
             maazimran/nodejs-app2:latest
