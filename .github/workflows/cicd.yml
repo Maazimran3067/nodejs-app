@@ -19,17 +19,17 @@ jobs:
             --password-stdin     
 
       - name: Build Docker Image
-        run: docker build -t maazimran/nodejs-app2 .
+        run: docker build -t maazimran/nodejs-app .
 
       - name: Publish Image to Docker Hub
-        run: docker push maazimran/nodejs-app2:latest
+        run: docker push maazimran/nodejs-app:latest
 
   deploy:
     needs: build
     runs-on: self-hosted
     steps:
       - name: Pull image from Docker Hub
-        run: docker pull maazimran/nodejs-app2:latest
+        run: docker pull maazimran/nodejs-app:latest
 
       - name: Delete old container
         run: docker rm -f nodejs-app-container || true
@@ -40,4 +40,4 @@ jobs:
             --name nodejs-app-container \
             -e MONGO_USER="${{ secrets.MONGO_USER }}" \
             -e MONGO_PASSWORD="${{ secrets.MONGO_PASSWORD }}" \
-            maazimran/nodejs-app2:latest
+            maazimran/nodejs-app:latest
